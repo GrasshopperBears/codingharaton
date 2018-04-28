@@ -15,10 +15,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
-
-    NotificationManager noti;
+    //
+//    NotificationManager noti;
+    ArrayList<TripUser> applicant_list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Registration.class);
                 startActivity(intent);
+                intent = getIntent();
+                TripUser applicant = (TripUser) intent.getSerializableExtra("등록 결과");
+                applicant_list.add(applicant);
             }
         });
 
@@ -58,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(MainActivity.this, board.class);
+                intent.putExtra("유저 목록", applicant_list);
+
                 startActivity(intent);
 //                PendingIntent pendingIntent  = PendingIntent.getActivity(MainActivity.this,
 //                        0, new Intent(getApplicationContext(),Registration.class),

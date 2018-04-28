@@ -2,6 +2,7 @@ package com.geunwoo.layout_exercise;
 
 import android.content.DialogInterface;
 import android.graphics.Point;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -64,8 +65,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
     double mLatitude;
     double mLongitude;
-    String gender;
-    String age;
+    int gender;
+    int age;
 
     Double locationLatitude;
     Double locationLongitude;
@@ -107,7 +108,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
             }
             //권한이 있는 경우
             else{
-                googleMap.setMyLocationEnabled(true);
+                requestMyLocation();
             }
         }
         //마시멜로 아래
@@ -124,16 +125,16 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
 
                 if(man.isChecked())
-                    gender = "남자";
+                    gender = 1;
                 if (women.isChecked())
-                    gender = "여자";
+                    gender = 2;
 
                 if (age10.isChecked())
-                    age = "10대";
+                    age = 10;
                 if (age20.isChecked())
-                    age = "20대";
+                    age = 20;
                 if (age30.isChecked())
-                    age = "30대";
+                    age = 30;
 
                 String hopeful = hope.getText().toString();
                 String answer = "";
@@ -145,13 +146,17 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                 else {
                     answer += String.format("출발지점: (%.2f,%.2f) \n", mLatitude, mLongitude);
                     answer += String.format("도착지점: (%.2f,%.2f) \n", locationLatitude, locationLongitude);
-                    answer += String.format("나이: %s \n", age);
-                    answer += String.format("성별: %s \n", gender);
+                    answer += String.format("나이: %d대 \n", age);
+                    answer += String.format("성별: %s \n", (gender == 1 ? "남자" : "여자"));
                     if (hopeful.length() > 0)
                         answer += String.format("기타 사항: %s", hopeful);
 
-                    if (guide.isChecked())
+                    if (guide.isChecked()){
+                        //TripUser applicant = TripUser(user, new Double[]{mLatitude, mLongitude}, new Double[]{locationLatitude, locationLongitude},
+                        //        gender, age, hopeful);
+                        //show(answer, applicant);
                         show(answer);
+                    }
                     else
                         Toast.makeText(getApplicationContext(), "약관에 동의해주세요.",
                                 Toast.LENGTH_SHORT).show();
@@ -161,6 +166,32 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
+//    void show(String answer, final TripUser applicant){
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("입력 내용을 확인해주세요.");
+//        builder.setMessage(answer);
+//        builder.setPositiveButton("예",
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Toast.makeText(getApplicationContext(), "등록이 완료되었습니다.",
+//                                Toast.LENGTH_LONG).show();
+//                        Intent intent = new Intent(Registration.this, MainActivity.class);
+//                        intent.putExtra("등록 결과", applicant);
+//                        startActivity(intent);
+//                    }
+//                });
+//        builder.setNegativeButton("아니오",
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Toast.makeText(getApplicationContext(), "취소되었습니다.", Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//
+//        builder.show();
+//    }
 
     void show(String answer){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -285,8 +316,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         LatLng KAIST = new LatLng(36.369647, 127.364068);
-//        mMap.addMarker(new MarkerOptions().position(KAIST).title("Marker in KAIST"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(KAIST));
+        mMap.addMarker(new MarkerOptions().position(KAIST).title("Marker in KAIST"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(KAIST));
 
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
         googleMap.animateCamera(zoom);
@@ -300,6 +331,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(Marker marker) {
                 // 마커 클릭시 호출되는 콜백 메서드
                 marker.remove();
+                locationLatitude = null;
+                locationLongitude = null;
                 Toast.makeText(getApplicationContext(),
                         "취소되었습니다."
                         , Toast.LENGTH_LONG).show();

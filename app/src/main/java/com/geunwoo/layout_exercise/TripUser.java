@@ -1,6 +1,11 @@
 package com.geunwoo.layout_exercise;
 
-public class TripUser{
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class TripUser implements Serializable{
     private User user;
     private Double[] start_location;
     private Double[] destination;
@@ -17,15 +22,26 @@ public class TripUser{
         this.comment = comment;
     }
 
-    public String printStart(){
-        String answer = String.format("(%.2f,%.2f)", start_location[0], start_location[1]);
+    public String getName(){
+        return user.name;
+    }
+
+    public Double[] getStart_location(){
+        return start_location;
+    }
+
+    public String forPrint(){
+        String answer = "";
+        answer += String.format("희망 성별: %s \n", gender);
+        answer += String.format("희망 연령대: %s", age);
+
         return answer;
     }
 
-    public String printDest(){
-        String answer = String.format("(%.2f,%.2f)", destination[0], destination[1]);
-        return answer;
+    public Double[] getDestination() {
+        return destination;
     }
+
 
 
 }
