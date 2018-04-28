@@ -33,6 +33,7 @@
             android:label="@string/title_activity_login" />
         <activity android:name=".Registration" />
         <activity android:name=".board"></activity>
+        <activity android:name=".signIn" />
     </application>
 
 </manifest>
