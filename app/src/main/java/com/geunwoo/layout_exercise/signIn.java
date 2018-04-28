@@ -94,7 +94,7 @@ public class signIn extends AppCompatActivity {
                 else{
                     // 1. get Shared Preference
                     SharedPreferences sharedPreference
-                            = getSharedPreferences("MYPREFRENCE", Context.MODE_PRIVATE);
+                            = getSharedPreferences("USERINFO", 0);
 
                     // 2. get Editor
                     SharedPreferences.Editor editor = sharedPreference.edit();

@@ -3,6 +3,8 @@ package com.geunwoo.layout_exercise;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -192,11 +194,15 @@ public class login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        SharedPreferences pref = getSharedPreferences("USERINFO", Context.MODE_WORLD_READABLE | Context.MODE_MULTI_PROCESS);
+        return pref.contains(email);
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
+        SharedPreferences pref = getSharedPreferences("USERINFO", Context.MODE_WORLD_READABLE | Context.MODE_MULTI_PROCESS);
+
+
         return password.length() > 4;
     }
 
@@ -243,6 +249,7 @@ public class login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
 
+
                 // Select only email addresses.
                 ContactsContract.Contacts.Data.MIMETYPE +
                         " = ?", new String[]{ContactsContract.CommonDataKinds.Email
@@ -251,6 +258,7 @@ public class login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                 // Show primary email addresses first. Note that there won't be
                 // a primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+
     }
 
     @Override
