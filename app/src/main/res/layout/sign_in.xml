@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/myPhoto"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/man" />
+
+        <EditText
+            android:id="@+id/sid"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:layout_marginTop="15dp"
+            android:inputType="textPersonName"
+            android:hint="아이디 (6자리 이상)" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:layout_marginTop="15dp"
+            android:inputType="textPassword"
+            android:hint="비밀번호"/>
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:layout_gravity="center"
+            android:hint="이름" />
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="phone"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:hint="전화번호" />
+
+        <EditText
+            android:id="@+id/age"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:hint="나이"/>
+
+        <RadioGroup
+            android:id="@+id/sexGroup"
+            android:layout_width="300dp"
+            android:layout_height="46dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="성별"
+                android:textColor="@color/Black"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:id="@+id/male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="남" />
+
+            <RadioButton
+                android:id="@+id/female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="여" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="선호하는 여행 스타일"
+            android:textColor="@color/Black"
+            android:textSize="22sp" />
+
+        <RadioGroup
+            android:id="@+id/styleGroup"
+            android:layout_width="300dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center">
+
+            <CheckBox
+                android:id="@+id/checkBox1"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="먹방" />
+
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="150dp"
+                android:layout_marginTop="-40dp"
+                android:layout_weight="1"
+                android:text="액티비티" />
+
+            <CheckBox
+                android:id="@+id/checkBox3"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="자연경관" />
+
+            <CheckBox
+                android:id="@+id/checkBox4"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="150dp"
+                android:layout_marginTop="-40dp"
+                android:layout_weight="1"
+                android:text="문화체험" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/signIn"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:text="회원가입" />
+
+    </LinearLayout>
+</ScrollView>
