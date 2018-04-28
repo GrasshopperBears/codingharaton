@@ -108,12 +108,10 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
             //권한이 있는 경우
             else{
                 googleMap.setMyLocationEnabled(true);
-                requestMyLocation();
             }
         }
         //마시멜로 아래
         else{
-            googleMap.setMyLocationEnabled(true);
             requestMyLocation();
         }
 
