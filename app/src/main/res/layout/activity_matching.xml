@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".matching"
+    android:orientation="vertical"
+    android:background="@color/back">
+
+    <LinearLayout
+        android:layout_marginTop="60dp"
+        android:id="@+id/userlocation"
+        android:layout_width="300dp"
+        android:layout_height="220dp"
+        android:layout_gravity="center"
+        >
+        <fragment
+            android:id="@+id/usermap"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/content"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:text="수락하시겠습니까?"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/OK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:text="수락"
+            android:background="@color/White"
+            android:textColor="@color/Black"
+            />
+
+        <Button
+            android:id="@+id/NO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="거절"
+            android:background="@color/Black"
+            android:textColor="@color/White"
+            />
+
+
+    </RadioGroup>
+</LinearLayout>
