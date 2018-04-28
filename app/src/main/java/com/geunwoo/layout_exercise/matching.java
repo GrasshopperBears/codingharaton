@@ -2,6 +2,7 @@ package com.geunwoo.layout_exercise;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
@@ -33,6 +34,7 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
     Double start_long;
     Double dest_lat;
     Double dest_long;
+    TextView UserInfo;
     TextView content;
     Button OK;
     Button NO;
@@ -41,6 +43,18 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching);
+
+        String CURSID = getIntent().getStringExtra("CURSID");
+        SharedPreferences pref
+                = getSharedPreferences("USERINFO", MODE_PRIVATE);
+        String value = pref.getString(CURSID, "");
+        String[] userInfo = value.split("::");
+        String sex = "";
+
+        if(Integer.parseInt(userInfo[4]) == 0)
+            sex = "남자";
+        else
+            sex = "여자";
 
         Intent intent = getIntent();
         final TripUser selectedUser = (TripUser) intent.getSerializableExtra("선택된 유저");
@@ -54,6 +68,7 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         dest_long = dest[1];
 
         Userlocation = findViewById(R.id.userlocation);
+        UserInfo = findViewById(R.id.content);
         content = findViewById(R.id.content);
         OK = findViewById(R.id.OK);
         NO = findViewById(R.id.NO);
@@ -62,6 +77,9 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.usermap);
         mapFragment.getMapAsync(this);
+
+        //동행 등록자 정보
+        UserInfo.setText("나이 : " + userInfo[3] + '\n' + "성별 : " + sex + '\n' + "여행 스타일 : " + userInfo[5]);
 
         OK.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,8 +100,6 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         });
 
     }
-
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
