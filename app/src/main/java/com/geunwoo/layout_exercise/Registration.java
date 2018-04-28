@@ -82,8 +82,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
     Double locationLatitude;
     Double locationLongitude;
 
-    private SharedPreferences user = getSharedPreferences("USERID", MODE_PRIVATE);
-    private SharedPreferences board = getSharedPreferences("BOARD", MODE_PRIVATE);
+    SharedPreferences user = getSharedPreferences("USERINFO", MODE_PRIVATE);
+    SharedPreferences board = getSharedPreferences("BOARD", MODE_PRIVATE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
