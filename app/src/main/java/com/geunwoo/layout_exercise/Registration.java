@@ -75,16 +75,16 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
     private Double mLatitude = 0.0;
     private Double mLongitude = 0.0;
-    int gender;
-    int age;
+    int gender = -1;
+    int age = 0;
+    int trigger = 0;
 
     private static final int PLACE_PICKER_REQUEST = 1;
 
     Double locationLatitude;
     Double locationLongitude;
 
-//    private SharedPreferences user = getSharedPreferences("USERINFO", MODE_PRIVATE);
-//    private SharedPreferences board = getSharedPreferences("BOARD", MODE_PRIVATE);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,17 +139,25 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
 
-                if (man.isChecked())
+                if (man.isChecked()){
                     gender = 0;
-                if (women.isChecked())
+                    if(women.isChecked()) {
+                        gender = 2;
+                    }
+                }
+                else if (women.isChecked())
                     gender = 1;
 
-                if (age10.isChecked())
+
+                if (age10.isChecked()){
                     age = 10;
-                if (age20.isChecked())
+                    trigger += 1;}
+                if (age20.isChecked()){
                     age = 20;
-                if (age30.isChecked())
+                    trigger += 1;}
+                if (age30.isChecked()){
                     age = 30;
+                    trigger += 1;}
 
                 String hopeful = hope.getText().toString();
                 String answer = "";
@@ -166,11 +174,29 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                     answer += String.format("출발지점: (%.2f,%.2f) \n", mLatitude, mLongitude);
                     answer += String.format("도착지점: (%.2f,%.2f) \n", locationLatitude, locationLongitude);
                     answer += String.format("나이: %d대 \n", age);
-                    answer += String.format("성별: %s \n", (gender == 0 ? "남자" : "여자"));
+                    answer += String.format("성별: %s \n", (gender== 2 ? "둘 다" : (gender == 0 ? "남자" : "여자")));
                     if (hopeful.length() > 0)
                         answer += String.format("기타 사항: %s", hopeful);
+                    if (!man.isChecked() && !women.isChecked())
+                        {
+                        Toast.makeText(getApplicationContext(), "성별을 하나 이상 선택해주세요.",
+                                Toast.LENGTH_SHORT).show();
+                    }
 
-                    if (guide.isChecked()) {
+                    else if (trigger == 0)
+                        Toast.makeText(getApplicationContext(), "하나 이상의 연령대를 선택해주세요.",
+                                Toast.LENGTH_SHORT).show();
+
+                    else if (trigger > 1)
+                    {
+                        Toast.makeText(getApplicationContext(), "하나의 연령대만 선택해주세요.",
+                                Toast.LENGTH_SHORT).show();
+                        age10.setActivated(false);
+                        age20.setActivated(false);
+                        age30.setActivated(false);
+                        trigger = 0;
+                    }
+                    else if (guide.isChecked()) {
                         show(answer);
                     } else
                         Toast.makeText(getApplicationContext(), "약관에 동의해주세요.",
@@ -271,6 +297,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
     } // pickMark
 
     void show(String answer) {
+        SharedPreferences user = getSharedPreferences("USERINFO", MODE_PRIVATE);
+        SharedPreferences board = getSharedPreferences("BOARD", MODE_PRIVATE);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("입력 내용을 확인해주세요.");
         builder.setMessage(answer);
@@ -283,7 +311,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
 
                         Toast.makeText(getApplicationContext(), "등록이 완료되었습니다.",
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_SHORT).show();
                         //
                         //
                         // 여기에 SID 구현해주어야 함.
@@ -306,7 +334,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(), "취소되었습니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "취소되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
 
