@@ -33,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
         Button login = findViewById(R.id.Login);
         Button board = findViewById(R.id.board);
 
+        User a = new User("doli", "1234", "Kim", "01090", "23", 1, "먹방, 사진");
+        TripUser e = new TripUser(a, new Double[]{3.5,4.5}, new Double[]{4.5,5.7}, 1, 20, "");
+        applicant_list.add(e);
+
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

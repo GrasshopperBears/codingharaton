@@ -27,14 +27,16 @@ public class board extends AppCompatActivity {
         ListViewAdapter Adapter = new ListViewAdapter(userlist);
 
         ListView listView = findViewById(R.id.list);
-        listView.setAdapter(adapter);
+        listView.setAdapter(Adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String strtext = (String) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), strtext, Toast.LENGTH_SHORT).show();
+                TripUser selectedUser = (TripUser) parent.getItemAtPosition(position);
+                Intent intent = new Intent(board.this, matching.class);
+                intent.putExtra("선택된 유저", selectedUser);
+                startActivity(intent);
             }
         });
     }

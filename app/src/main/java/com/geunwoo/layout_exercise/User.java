@@ -1,15 +1,18 @@
 package com.geunwoo.layout_exercise;
 
-public class User {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class User implements Serializable{
     String SID;
     String password;
     String name;
     String phone;
     String age;
     int gender;
-    int[] preference;
+    String preference;
 
-    public User(String SID, String password, String name, String phone, String age, int gender, int[] preference){
+    public User(String SID, String password, String name, String phone, String age, int gender, String preference){
         this.SID = SID;
         this.password = password;
         this.name = name;
