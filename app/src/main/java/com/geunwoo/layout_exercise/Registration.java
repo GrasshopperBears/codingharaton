@@ -125,9 +125,9 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
 
                 if(man.isChecked())
-                    gender = 1;
+                    gender = 0;
                 if (women.isChecked())
-                    gender = 2;
+                    gender = 1;
 
                 if (age10.isChecked())
                     age = 10;
@@ -147,7 +147,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                     answer += String.format("출발지점: (%.2f,%.2f) \n", mLatitude, mLongitude);
                     answer += String.format("도착지점: (%.2f,%.2f) \n", locationLatitude, locationLongitude);
                     answer += String.format("나이: %d대 \n", age);
-                    answer += String.format("성별: %s \n", (gender == 1 ? "남자" : "여자"));
+                    answer += String.format("성별: %s \n", (gender == 0 ? "남자" : "여자"));
                     if (hopeful.length() > 0)
                         answer += String.format("기타 사항: %s", hopeful);
 
@@ -201,6 +201,11 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        //동행 등록 정보를 저장
+
+
+
                         Toast.makeText(getApplicationContext(), "등록이 완료되었습니다.",
                                 Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Registration.this, MainActivity.class);
