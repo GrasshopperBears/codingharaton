@@ -39,18 +39,16 @@ public class MainActivity extends AppCompatActivity {
         Button login = findViewById(R.id.Login);
         Button board = findViewById(R.id.board);
 
-        applicant_list.add(e);
-        applicant_list.add(e);
+//        applicant_list.add(e);
+//        applicant_list.add(e);
 
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Registration.class);
+                intent.putExtra("CURSID", CURSID);
                 startActivity(intent);
-                intent = getIntent();
-                TripUser applicant = (TripUser) intent.getSerializableExtra("등록 결과");
-                applicant_list.add(applicant);
             }
         });
 

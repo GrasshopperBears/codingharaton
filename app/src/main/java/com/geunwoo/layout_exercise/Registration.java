@@ -72,6 +72,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
     CheckBox age30;
     CheckBox guide;
     EditText hope;
+    Intent getSID;
+    private String CURSID;
 
     private Double mLatitude = 0.0;
     private Double mLongitude = 0.0;
@@ -82,6 +84,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
     Double locationLatitude;
     Double locationLongitude;
+
 
 //    private SharedPreferences user = getSharedPreferences("USERINFO", MODE_PRIVATE);
 //    private SharedPreferences board = getSharedPreferences("BOARD", MODE_PRIVATE);
@@ -270,7 +273,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
     } // pickMark
 
-    void show(String answer) {
+    void show(final String answer) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("입력 내용을 확인해주세요.");
         builder.setMessage(answer);
@@ -280,7 +284,14 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                     public void onClick(DialogInterface dialog, int which) {
 
                         //동행 등록 정보를 저장
-
+                        getSID = getIntent();
+                        CURSID = getSID.getStringExtra("CURSID");
+                        SharedPreferences sharedPreference
+                                = getSharedPreferences("REQUESTLIST", MODE_PRIVATE);
+                        final int bid = sharedPreference.getAll().size() + 1;
+                        SharedPreferences.Editor editor = sharedPreference.edit();
+                        editor.putString(Integer.toString(bid), CURSID + "\n" + answer);
+                        editor.commit();
 
                         Toast.makeText(getApplicationContext(), "등록이 완료되었습니다.",
                                 Toast.LENGTH_LONG).show();
@@ -288,7 +299,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                         //
                         // 여기에 SID 구현해주어야 함.
                         //
-                        // String userinfo = user.getString(SID, "Fuck");
+                        // String userinfo = user.getString(SID, "");
 //                        userinfo += "::" + age + "::" + gender + "::" + mLatitude.toString() + "::" + mLongitude.toString()
 //                                + "::" + locationLatitude.toString() + "::" + locationLongitude.toString() + hope.getText().toString();
 //

@@ -23,7 +23,7 @@ public class board extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
-        SharedPreferences board = getSharedPreferences("BOARD", MODE_PRIVATE);
+        SharedPreferences board = getSharedPreferences("REQUESTLIST", MODE_PRIVATE);
         Map<String,String> boardcollect = (Map<String, String>) board.getAll();
         ArrayList<String> entireboard = new ArrayList<String>();
 
