@@ -35,6 +35,8 @@
         <activity android:name=".board" />
         <activity android:name=".signIn" />
         <activity android:name=".myLogin"></activity>
+        <activity android:name=".board" />
+        <activity android:name=".matching"></activity>
     </application>
 
 </manifest>

@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     //
 //    NotificationManager noti;
     ArrayList<TripUser> applicant_list = new ArrayList<>();
+    User a = new User("doli", "1234", "Kim", "01090", "23", 1, "먹방, 사진");
+    TripUser e = new TripUser(a, new Double[]{3.5,4.5}, new Double[]{4.5,5.7}, 1, 20, "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
         Button join = findViewById(R.id.join);
         Button login = findViewById(R.id.Login);
         Button board = findViewById(R.id.board);
+
+        applicant_list.add(e);
+        applicant_list.add(e);
+
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,8 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, board.class);
                 intent.putExtra("유저 목록", applicant_list);
-
                 startActivity(intent);
+
+
 //                PendingIntent pendingIntent  = PendingIntent.getActivity(MainActivity.this,
 //                        0, new Intent(getApplicationContext(),Registration.class),
 //                        PendingIntent.FLAG_UPDATE_CURRENT);
@@ -86,6 +93,11 @@ public class MainActivity extends AppCompatActivity {
 //                noti.notify(0, nott.build());
             }
         });
+
+//        Intent cc = getIntent();
+//        TripUser finishedUser = (TripUser) cc.getSerializableExtra("완료된 매칭");
+//        if(finishedUser != null)
+//            applicant_list.remove(finishedUser);
 
 
 
