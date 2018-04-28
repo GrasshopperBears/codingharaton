@@ -1,5 +1,6 @@
 package com.geunwoo.layout_exercise;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<TripUser> applicant_list = new ArrayList<>();
     User a = new User("doli", "1234", "Kim", "01090", "23", 1, "먹방, 사진");
     TripUser e = new TripUser(a, new Double[]{3.5,4.5}, new Double[]{4.5,5.7}, 1, 20, "");
+    static int GET_SID = 1;
+    static String CURSID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, myLogin.class);
-                startActivity(intent);
+                startActivityForResult(intent, GET_SID);
             }
         });
 
@@ -100,7 +104,16 @@ public class MainActivity extends AppCompatActivity {
 //            applicant_list.remove(finishedUser);
 
 
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == GET_SID && resultCode == Activity.RESULT_OK){
+            CURSID = data.getStringExtra("result");
+            Toast.makeText(getApplicationContext(), "당신의 아이디는 " + CURSID, Toast.LENGTH_LONG).show();
+        }
 
     }
 

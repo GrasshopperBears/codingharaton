@@ -1,6 +1,8 @@
 package com.geunwoo.layout_exercise;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,7 +33,7 @@ public class myLogin extends AppCompatActivity {
                 password = editpassword.getText().toString();
 
                 SharedPreferences pref
-                        = getSharedPreferences("USERINFO", 0);
+                        = getSharedPreferences("USERINFO", MODE_PRIVATE);
 
                 if(sid.length() == 0 || password.length() == 0)
                     Toast.makeText(getApplicationContext(), "아이디와 비밀번호 모두 입력해주세요.", Toast.LENGTH_LONG).show();
@@ -40,15 +42,20 @@ public class myLogin extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "등록되지 않은 아이디입니다.", Toast.LENGTH_LONG).show();
                 }
                 else{
-                    String value = pref.getString("USERINFO", "");
+                    String value = pref.getString(sid, "");
 
                     value = value.split("::")[0];
                     if(password.length() == 0)
                         Toast.makeText(getApplicationContext(), "비밀번호를 입력해주세요", Toast.LENGTH_LONG).show();
-                    else if(password != value)
-                        Toast.makeText(getApplicationContext(), "옳지 않은 비밀번호입니다."+value+" but "+password, Toast.LENGTH_LONG).show();
+                    else if(!password.equals(value))
+                        Toast.makeText(getApplicationContext(), "옳지 않은 비밀번호입니다."+ value+" but "+ password, Toast.LENGTH_LONG).show();
                     else{
-                        Toast.makeText(getApplicationContext(), "정답입니다!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "로그인 완료", Toast.LENGTH_LONG).show();
+
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("result", sid);
+                        setResult(Activity.RESULT_OK,returnIntent);
+                        finish();
                     }
                 }
 

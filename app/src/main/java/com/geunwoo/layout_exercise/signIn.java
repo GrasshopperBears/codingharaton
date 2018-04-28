@@ -94,21 +94,26 @@ public class signIn extends AppCompatActivity {
                 else{
                     // 1. get Shared Preference
                     SharedPreferences sharedPreference
-                            = getSharedPreferences("USERINFO", 0);
+                            = getSharedPreferences("USERINFO", MODE_PRIVATE);
 
                     // 2. get Editor
                     SharedPreferences.Editor editor = sharedPreference.edit();
 
                     // 3. set Key values
-                    editor.putString(sid, password + "::" + name + "::" + phone + "::" + age + "::" + String.valueOf(sex) + "::" + personalStyle);
+                    if(sharedPreference.contains(sid))
+                        Toast.makeText(getApplicationContext(), "이미 존재하는 사용자입니다.", Toast.LENGTH_LONG).show();
+                    else {
+                        editor.putString(sid, password + "::" + name + "::" + phone + "::" + age + "::" + String.valueOf(sex) + "::" + personalStyle);
 
-                    // 4. commit the values
-                    editor.commit();
+                        // 4. commit the values
+                        editor.commit();
 
-                    Toast.makeText(getApplicationContext(), "회원가입을 축하드립니다!",
-                            Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(signIn.this, MainActivity.class);
-                    startActivity(intent);
+                        Toast.makeText(getApplicationContext(), "회원가입을 축하드립니다!",
+                                Toast.LENGTH_LONG).show();
+                        //Intent intent = new Intent(signIn.this, MainActivity.class);
+                        //startActivity(intent);
+                        finish();
+                    }
                 }
             }
         });
