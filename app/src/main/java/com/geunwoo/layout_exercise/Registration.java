@@ -1,5 +1,6 @@
 package com.geunwoo.layout_exercise;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Parcelable;
@@ -8,9 +9,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,6 +35,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +76,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
     int gender;
     int age;
 
+    private static final int PLACE_PICKER_REQUEST = 1;
+
     Double locationLatitude;
     Double locationLongitude;
 
@@ -89,9 +99,9 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
         final CheckBox checker = findViewById(R.id.checker);
 
 
-        locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             //GPS 설정화면으로 이동
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -100,19 +110,19 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         //마시멜로 이상이면 권한 요청하기
-        if(Build.VERSION.SDK_INT >= 23){
+        if (Build.VERSION.SDK_INT >= 23) {
             //권한이 없는 경우
-            if(ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(Registration.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION , Manifest.permission.ACCESS_FINE_LOCATION} , 1);
+            if (ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(Registration.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
             //권한이 있는 경우
-            else{
+            else {
                 requestMyLocation();
             }
         }
         //마시멜로 아래
-        else{
+        else {
             requestMyLocation();
         }
 
@@ -124,7 +134,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
 
-                if(man.isChecked())
+                if (man.isChecked())
                     gender = 0;
                 if (women.isChecked())
                     gender = 1;
@@ -139,11 +149,10 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                 String hopeful = hope.getText().toString();
                 String answer = "";
 
-                if(locationLatitude == null || locationLongitude == null){
+                if (locationLatitude == null || locationLongitude == null) {
                     Toast.makeText(getApplicationContext(), "도착지를 표시해주세요.",
                             Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     answer += String.format("출발지점: (%.2f,%.2f) \n", mLatitude, mLongitude);
                     answer += String.format("도착지점: (%.2f,%.2f) \n", locationLatitude, locationLongitude);
                     answer += String.format("나이: %d대 \n", age);
@@ -151,13 +160,12 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                     if (hopeful.length() > 0)
                         answer += String.format("기타 사항: %s", hopeful);
 
-                    if (guide.isChecked()){
+                    if (guide.isChecked()) {
                         //TripUser applicant = TripUser(user, new Double[]{mLatitude, mLongitude}, new Double[]{locationLatitude, locationLongitude},
                         //        gender, age, hopeful);
                         //show(answer, applicant);
                         show(answer);
-                    }
-                    else
+                    } else
                         Toast.makeText(getApplicationContext(), "약관에 동의해주세요.",
                                 Toast.LENGTH_SHORT).show();
                 }
@@ -165,7 +173,35 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
+
+        PlaceAutocompleteFragment fragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        fragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+
+            }
+
+            @Override
+            public void onError(Status status) {
+
+            }
+        });
+
+        int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+        try {
+            Intent intent =
+                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                            .build(this);
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+        } catch (GooglePlayServicesRepairableException e) {
+            // TODO: Handle the error.
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // TODO: Handle the error.
+        }
     }
+
 
 //    void show(String answer, final TripUser applicant){
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -193,7 +229,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 //        builder.show();
 //    }
 
-    void show(String answer){
+    void show(String answer) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("입력 내용을 확인해주세요.");
         builder.setMessage(answer);
@@ -203,7 +239,6 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                     public void onClick(DialogInterface dialog, int which) {
 
                         //동행 등록 정보를 저장
-
 
 
                         Toast.makeText(getApplicationContext(), "등록이 완료되었습니다.",
@@ -227,22 +262,22 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         //ACCESS_COARSE_LOCATION 권한
-        if(requestCode==1){
+        if (requestCode == 1) {
             //권한받음
-            if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 requestMyLocation();
             }
             //권한못받음
-            else{
+            else {
                 Toast.makeText(this, "권한없음", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
     }
 
-    public void requestMyLocation(){
-        if(ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+    public void requestMyLocation() {
+        if (ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         //요청
@@ -253,8 +288,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            if(ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            if (ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             //나의 위치를 한번만 가져오기 위해
@@ -265,19 +300,23 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
             mLongitude = location.getLongitude(); //경도
 
             //맵생성
-            SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
             //콜백클래스 설정
             mapFragment.getMapAsync(Registration.this);
         }
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) { Log.d("gps", "onStatusChanged"); }
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.d("gps", "onStatusChanged");
+        }
 
         @Override
-        public void onProviderEnabled(String provider) { }
+        public void onProviderEnabled(String provider) {
+        }
 
         @Override
-        public void onProviderDisabled(String provider) { }
+        public void onProviderDisabled(String provider) {
+        }
     };
 
     //구글맵 생성 콜백
@@ -287,6 +326,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
         //지도타입 - 일반
         this.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        googleMap.getUiSettings().setCompassEnabled(true);
 
         //나의 위치 설정
         LatLng position = new LatLng(mLatitude , mLongitude);
