@@ -1,6 +1,7 @@
 package com.geunwoo.layout_exercise;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 public class board extends AppCompatActivity {
 
@@ -21,11 +24,19 @@ public class board extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
-        Intent intent = getIntent();
-        ArrayList<TripUser> userlist = (ArrayList<TripUser>) intent.getSerializableExtra("유저 목록");
+        SharedPreferences board = getSharedPreferences("BOARD", MODE_PRIVATE);
+        Map<String,String> boardcollect = (Map<String, String>) board.getAll();
+        ArrayList<String> entireboard = new ArrayList<String>();
+
+        Iterator<String> keys = boardcollect.keySet().iterator();
+        while(keys.hasNext()){
+            String key = keys.next();
+            String merged = key + boardcollect.get(key);
+            entireboard.add(merged);
+        }
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, LIST_MENU);
-        ListViewAdapter Adapter = new ListViewAdapter(userlist);
+        ListViewAdapter Adapter = new ListViewAdapter(entireboard);
 
         ListView listView = findViewById(R.id.list);
         listView.setAdapter(Adapter);
