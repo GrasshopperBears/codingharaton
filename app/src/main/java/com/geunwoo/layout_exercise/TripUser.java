@@ -50,6 +50,29 @@ public class TripUser implements Serializable{
         return destination;
     }
 
+    @Override
+    public boolean equals(Object o) {
+
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof TripUser)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        TripUser c = (TripUser) o;
+
+        // Compare the data members and return accordingly
+        return c.user.equals(this.user) && c.start_location.equals(this.start_location)
+                &&c.destination.equals(this.destination) && c.gender == this.gender
+                && c.age == this.age && c.comment.equals(this.comment);
+    }
+
 
 
 }

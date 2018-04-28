@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class board extends AppCompatActivity {
 
     static final String[] LIST_MENU = {"LIST1", "LIST2", "LIST3"} ;
+    static TripUser finishedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,11 @@ public class board extends AppCompatActivity {
                 Intent intent = new Intent(board.this, matching.class);
                 intent.putExtra("선택된 유저", selectedUser);
                 startActivity(intent);
+                finishedUser = (TripUser) intent.getSerializableExtra("완료된 매칭");
+                if (finishedUser != null)
+                    finish();
             }
         });
+
     }
 }
