@@ -52,7 +52,7 @@ public class ListViewAdapter extends BaseAdapter {
         // 아이템 내 각 위젯에 데이터 반영
         String[] result = applicant.split("::");
         String answer = String.format("희망 성별: %s \n 희망 연령대: %s대 \n",
-                result[7].equals("0") ? "남자" : "여자", result[6]);
+                result[7].equals("2") ? "둘 다" : (result[7].equals("0") ? "남자" : "여자"), result[6]);
         titleTextView.setText(result[0]);
         descTextView.setText(answer);
 

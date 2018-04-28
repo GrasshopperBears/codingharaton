@@ -17,7 +17,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
         android:text="쉐어링 등록"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:layout_marginLeft="45dp"
@@ -30,7 +30,7 @@
         android:layout_marginTop="10dp"
         android:id="@+id/boxMap"
         android:layout_width="match_parent"
-        android:layout_height="220dp">
+        android:layout_height="300dp">
         <fragment
             android:id="@+id/map"
             android:layout_weight="1"
@@ -48,7 +48,7 @@
     </RelativeLayout>
 
     <RadioGroup
-        android:layout_width="301dp"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="45dp"
         android:layout_marginTop="30dp"
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:text="성별" />
+            android:text="희망 성별" />
 
         <CheckBox
             android:id="@+id/man"
@@ -78,7 +78,7 @@
     </RadioGroup>
 
     <RadioGroup
-        android:layout_width="300dp"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="45dp"
         android:orientation="horizontal">
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:text="연령" />
+            android:text="희망 연령대" />
 
         <CheckBox
             android:id="@+id/age10"
@@ -125,7 +125,7 @@
 
     <EditText
         android:id="@+id/hope"
-        android:layout_width="300dp"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:textSize="10dp"
         android:layout_alignParentLeft="true"
@@ -141,7 +141,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="5dp"
         android:text="이용 약관에 동의합니다." />
 
     <Button
