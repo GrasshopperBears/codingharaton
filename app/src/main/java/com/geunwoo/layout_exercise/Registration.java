@@ -181,6 +181,9 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                 }
 
                 else {
+                    String returner = "";
+                    returner += String.format("%s \n %s \n %s \n %s \n %s \n %s \n",
+                            mLatitude, mLongitude,locationLatitude,locationLongitude, age, (gender== 2 ? "둘 다" : (gender == 0 ? "남자" : "여자")), hopeful);
                     answer += String.format("출발지점: (%.2f,%.2f) \n", mLatitude, mLongitude);
                     answer += String.format("도착지점: (%.2f,%.2f) \n", locationLatitude, locationLongitude);
                     answer += String.format("나이: %d대 \n", age);
@@ -210,7 +213,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                         trigger = 0;
                     }
                     else if (guide.isChecked()) {
-                        show(answer);
+                        show(answer, returner);
                         trigger = 0 ;
                     }
                     else{
@@ -348,7 +351,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
     } // pickMark
 
-    void show(final String answer) {
+    void show(final String answer, final String returner) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("입력 내용을 확인해주세요.");
@@ -365,7 +368,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                                 = getSharedPreferences("REQUESTLIST", MODE_PRIVATE);
                         final int bid = sharedPreference.getAll().size() + 1;
                         SharedPreferences.Editor editor = sharedPreference.edit();
-                        editor.putString(Integer.toString(bid), CURSID + "\n" + answer + "0");
+                        editor.putString(Integer.toString(bid), CURSID + "\n" + returner + "0");
                         editor.commit();
 
                         Toast.makeText(getApplicationContext(), "등록이 완료되었습니다.",

@@ -44,6 +44,7 @@ public class board extends AppCompatActivity {
 
                 Intent intent = new Intent(board.this, matching.class);
                 intent.putExtra("BID", position);
+
                 startActivity(intent);
                 finish();
             }
