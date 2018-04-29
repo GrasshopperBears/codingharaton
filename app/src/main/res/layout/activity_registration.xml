@@ -46,12 +46,35 @@
             />
 
     </RelativeLayout>
+    
+    <RadioGroup
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_marginLeft="30dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/startloc"
+            android:text="시작위치"/>
+
+        <Button
+            android:layout_marginLeft="50dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/destloc"
+            android:text="도착위치"/>
+
+    </RadioGroup>
 
     <RadioGroup
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="45dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
