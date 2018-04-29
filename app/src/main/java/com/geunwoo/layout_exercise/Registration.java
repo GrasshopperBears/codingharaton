@@ -168,6 +168,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
                 String hopeful = hope.getText().toString();
                 String answer = "";
+                String returner = "";
 
 
                 if (mLatitude == 0.0 || mLongitude == 0.0){
@@ -181,8 +182,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                 }
 
                 else {
-                    String returner = "";
-                    returner += String.format("%s \n %s \n %s \n %s \n %s \n %s \n",
+
+                    returner = String.format("%s \n %s \n %s \n %s \n %s \n %s \n",
                             mLatitude, mLongitude,locationLatitude,locationLongitude, age, (gender== 2 ? "둘 다" : (gender == 0 ? "남자" : "여자")), hopeful);
                     answer += String.format("출발지점: (%.2f,%.2f) \n", mLatitude, mLongitude);
                     answer += String.format("도착지점: (%.2f,%.2f) \n", locationLatitude, locationLongitude);
@@ -366,7 +367,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                         CURSID = getSID.getStringExtra("CURSID");
                         SharedPreferences sharedPreference
                                 = getSharedPreferences("REQUESTLIST", MODE_PRIVATE);
-                        final int bid = sharedPreference.getAll().size() + 1;
+                        final int bid = sharedPreference.getAll().size();
                         SharedPreferences.Editor editor = sharedPreference.edit();
                         editor.putString(Integer.toString(bid), CURSID + "\n" + returner + "\n" + "0");
                         editor.commit();

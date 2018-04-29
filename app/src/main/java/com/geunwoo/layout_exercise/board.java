@@ -16,12 +16,14 @@ import java.util.Map;
 
 public class board extends AppCompatActivity {
 
-    String CURUSERID = getIntent().getStringExtra("CURSID");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
+
+        final String CURUSERID = getIntent().getStringExtra("CURSID");
 
         SharedPreferences board = getSharedPreferences("REQUESTLIST", MODE_PRIVATE);
         Map<String,String> boardcollect = (Map<String, String>) board.getAll();
@@ -45,8 +47,8 @@ public class board extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(board.this, matching.class);
-                intent.putExtra("BID", position);
-                intent.putExtra("CURSID", CURUSERID);
+                intent.putExtra("BID", String.format("%s", position));
+                //intent.putExtra("CURSID", CURUSERID);
                 startActivity(intent);
                 finish();
             }
