@@ -55,6 +55,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -315,6 +316,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
         MarkerOptions markerOptions = new MarkerOptions(); // 옵션 설정 해놓을 변수
         markerOptions.position(LL); // 위치 적용
+
 //        markerOptions.title(String.format(Locale.KOREA,"%.3f",LL.latitude)+","+String.format(Locale.KOREA,"%.3f",LL.longitude));
 //        markerOptions.snippet(address.substring(0,20)); // 주소 넣음
 
@@ -333,6 +335,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
         if (locationLongitude == null && locationLongitude == null){
             markerOptions.title(String.format("도착지점: %s", name)); // 이름
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
             locationLatitude = markerOptions.getPosition().latitude;
             locationLongitude = markerOptions.getPosition().longitude;
             googleMap.addMarker(markerOptions).showInfoWindow(); // 맵에 추가
@@ -479,7 +482,6 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                     mLatitude = point.latitude;
                     mLongitude = point.longitude;
                     mOptions.title("시작 지점");
-                    mOptions.snippet(mLatitude.toString() + "," + mLongitude.toString());
 
                     mOptions.position(new LatLng(mLatitude, mLongitude));
                     googleMap.addMarker(mOptions).showInfoWindow();
@@ -489,8 +491,8 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                     locationLatitude = point.latitude;
                     locationLongitude = point.longitude;
                     mOptions.title("도착 지점");
-                    mOptions.snippet(locationLatitude.toString() + "," + locationLongitude.toString());
                     mOptions.position(new LatLng(locationLatitude, locationLongitude));
+                    mOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                     googleMap.addMarker(mOptions).showInfoWindow();
                     destination = mOptions.getPosition();
                 }
