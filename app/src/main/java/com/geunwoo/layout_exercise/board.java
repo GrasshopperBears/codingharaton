@@ -16,10 +16,11 @@ import java.util.Map;
 
 public class board extends AppCompatActivity {
 
-    String CURUSERID = getIntent().getStringExtra("CURSID");
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        final String CURUSERID = getIntent().getStringExtra("CURSID");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
@@ -45,7 +46,7 @@ public class board extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(board.this, matching.class);
-                intent.putExtra("BID", position);
+                intent.putExtra("BID", Integer.toString(position+1));
                 intent.putExtra("CURSID", CURUSERID);
                 startActivity(intent);
                 finish();

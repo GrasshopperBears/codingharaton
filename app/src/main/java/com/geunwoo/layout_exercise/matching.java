@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -58,6 +59,9 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         SharedPreferences users
                 = getSharedPreferences("USERINFO", MODE_PRIVATE);
         String uploadInfo = pref.getString(BID, "");
+
+        Log.e("matching", uploadInfo);
+
         String uploaderID = uploadInfo.split("\n")[0];
         String[] uploaderInfo = users.getString(uploaderID, "").split("\n");
 
