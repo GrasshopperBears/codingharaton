@@ -48,7 +48,7 @@ public class myLogin extends AppCompatActivity {
                     if(password.length() == 0)
                         Toast.makeText(getApplicationContext(), "비밀번호를 입력해주세요", Toast.LENGTH_LONG).show();
                     else if(!password.equals(value))
-                        Toast.makeText(getApplicationContext(), "옳지 않은 비밀번호입니다."+ value+" but "+ password, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "옳지 않은 비밀번호입니다.", Toast.LENGTH_LONG).show();
                     else{
                         Toast.makeText(getApplicationContext(), "로그인 완료", Toast.LENGTH_LONG).show();
 

@@ -44,10 +44,10 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching);
 
-        String CURSID = getIntent().getStringExtra("CURSID");
+        String BID = getIntent().getStringExtra("BID");
         SharedPreferences pref
                 = getSharedPreferences("USERINFO", MODE_PRIVATE);
-        String value = pref.getString(CURSID, "");
+        String value = pref.getString(BID, "");
         String[] userInfo = value.split("::");
         String sex = "";
 
