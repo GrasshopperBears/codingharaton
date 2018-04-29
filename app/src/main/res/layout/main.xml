@@ -27,8 +27,8 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/Black"
-        android:textColor="@color/White"
+        android:background="@color/mainButton"
+        android:textColor="@color/Black"
         android:text="로그인"
         />
 
@@ -38,8 +38,8 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/Black"
-        android:textColor="@color/White"
+        android:background="@color/mainButton"
+        android:textColor="@color/Black"
         android:text="회원가입"
         />
 
@@ -49,8 +49,8 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/Black"
-        android:textColor="@color/White"
+        android:background="@color/mainButton"
+        android:textColor="@color/Black"
         android:text="등록"/>
 
     <Button
@@ -59,8 +59,8 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/Black"
-        android:textColor="@color/White"
+        android:background="@color/mainButton"
+        android:textColor="@color/Black"
         android:text="여행자 찾기"
         />
 
