@@ -30,6 +30,8 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
 
     GoogleMap googleMap;
     LinearLayout Userlocation;
+    LatLng startposition;
+    LatLng destination;
     Double start_lat;
     Double start_long;
     Double dest_lat;
@@ -44,8 +46,13 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching);
 
-        String CURUSERID = getIntent().getStringExtra("CURSID");
-        String BID = getIntent().getStringExtra("BID");
+        String BID = getIntent().getStringExtra("BID"); //현재 게시물 번호
+
+        //String[] Biddata = BID.split("\n");
+
+
+
+
         SharedPreferences pref
                 = getSharedPreferences("REQUESTLIST", MODE_PRIVATE);
         SharedPreferences users
@@ -54,6 +61,11 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         String uploaderID = uploadInfo.split("\n")[0];
         String[] uploaderInfo = users.getString(uploaderID, "").split("\n");
 
+
+        String returner = uploaderInfo[1];
+        String[] destinfo = returner.split("\n");
+        startposition = new LatLng(Integer.parseInt(destinfo[0]), Integer.parseInt(destinfo[1]));
+        destination = new LatLng(Integer.parseInt(destinfo[2]), Integer.parseInt(destinfo[3]));
         String sex = "";
 
         if(Integer.parseInt(uploaderInfo[4]) == 0)
@@ -112,19 +124,16 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
 
         this.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        //나의 위치 설정
-        LatLng position = new LatLng(start_lat, start_long);
-        LatLng destination = new LatLng(dest_lat, dest_long);
 
         MarkerOptions current = new MarkerOptions();
-        current.position(position);
+        current.position(startposition);
         googleMap.addMarker(current).showInfoWindow();
         current.position(destination);
         googleMap.addMarker(current).showInfoWindow();
-        Userlocation.setVisibility(View.VISIBLE);
+
 
         //화면중앙의 위치와 카메라 줌비율
-        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destination, 13));
+        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startposition, 13));
 
     }
 }

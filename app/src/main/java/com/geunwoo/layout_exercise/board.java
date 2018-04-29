@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class board extends AppCompatActivity {
 
-    private String CURUSERID = getIntent().getStringExtra("BID");
+    String CURUSERID = getIntent().getStringExtra("CURSID");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
