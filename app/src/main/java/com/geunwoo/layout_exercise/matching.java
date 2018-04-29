@@ -47,7 +47,7 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching);
 
-        String BID = getIntent().getStringExtra("BID"); //현재 게시물 번호
+        final String BID = getIntent().getStringExtra("BID"); //현재 게시물 번호
 
         //String[] Biddata = BID.split("\n");
 
@@ -95,8 +95,14 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "매칭이 완료되었습니다. " +
                         "주어진 연락처로 연락해주세요.", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(matching.this, MainActivity.class);
-                startActivity(intent);
+
+                SharedPreferences now
+                        = getSharedPreferences("REQUESTLIST", MODE_PRIVATE);
+                SharedPreferences.Editor mEditor = now.edit();
+                mEditor.remove(BID);
+                mEditor.apply();
+                
+                finish();
             }
         });
 

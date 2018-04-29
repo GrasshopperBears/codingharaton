@@ -376,8 +376,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                         Toast.makeText(getApplicationContext(), "등록이 완료되었습니다.",
                                 Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(Registration.this, MainActivity.class);
-                        startActivity(intent);
+                        finish();
                     }
                 });
         builder.setNegativeButton("아니오",

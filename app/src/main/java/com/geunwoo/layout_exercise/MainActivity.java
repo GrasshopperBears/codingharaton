@@ -13,6 +13,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     User a = new User("doli", "1234", "Kim", "01090", "23", 1, "먹방, 사진");
     TripUser e = new TripUser(a, new Double[]{3.5,4.5}, new Double[]{4.5,5.7}, 1, 20, "");
     static int GET_SID = 1;
-    static String CURSID = " ";
+    private String CURSID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 if(CURSID.length() == 0)
                     Toast.makeText(getApplicationContext(), "로그인 후 이용해주세요", Toast.LENGTH_LONG).show();
                 else{
+
                     Intent intent = new Intent(MainActivity.this, Registration.class);
                     intent.putExtra("CURSID", CURSID);
                     startActivity(intent);
@@ -77,9 +79,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(MainActivity.this, board.class);
-                intent.putExtra("CURSID", CURSID);
-                startActivity(intent);
+                if(CURSID.length() == 0)
+                    Toast.makeText(getApplicationContext(), "회원만 이용 가능합니다", Toast.LENGTH_LONG).show();
+                else{
+                    Intent intent = new Intent(MainActivity.this, board.class);
+                    intent.putExtra("CURSID", CURSID);
+                    startActivity(intent);
+                }
+
+
 
 
 //                PendingIntent pendingIntent  = PendingIntent.getActivity(MainActivity.this,
