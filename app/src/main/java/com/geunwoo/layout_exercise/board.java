@@ -16,8 +16,6 @@ import java.util.Map;
 
 public class board extends AppCompatActivity {
 
-    static final String[] LIST_MENU = {"LIST1", "LIST2", "LIST3"} ;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,12 +27,12 @@ public class board extends AppCompatActivity {
 
         Iterator<String> keys = boardcollect.keySet().iterator();
         while(keys.hasNext()){
-            String key = keys.next();
-            String merged = key + boardcollect.get(key);
-            entireboard.add(merged);
+            String tmpBid = keys.next();
+            String bInfo = board.getString(tmpBid, "Excption");
+            String tmpSid = bInfo.split("\n")[0];
+            entireboard.add(tmpSid + "님의 동행요청");
         }
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, LIST_MENU);
         ListViewAdapter Adapter = new ListViewAdapter(entireboard);
 
         ListView listView = findViewById(R.id.list);
@@ -44,9 +42,8 @@ public class board extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                TripUser selectedUser = (TripUser) parent.getItemAtPosition(position);
                 Intent intent = new Intent(board.this, matching.class);
-                intent.putExtra("선택된 유저", selectedUser);
+                intent.putExtra("BID", position);
                 startActivity(intent);
                 finish();
             }
