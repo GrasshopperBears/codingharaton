@@ -101,7 +101,7 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
                 SharedPreferences.Editor mEditor = now.edit();
                 mEditor.remove(BID);
                 mEditor.apply();
-                
+
                 finish();
             }
         });
