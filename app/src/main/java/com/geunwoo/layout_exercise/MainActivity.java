@@ -46,9 +46,13 @@ public class MainActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Registration.class);
-                intent.putExtra("CURSID", CURSID);
-                startActivity(intent);
+                if(CURSID.length() == 0)
+                    Toast.makeText(getApplicationContext(), "로그인 후 이용해주세요", Toast.LENGTH_LONG).show();
+                else{
+                    Intent intent = new Intent(MainActivity.this, Registration.class);
+                    intent.putExtra("CURSID", CURSID);
+                    startActivity(intent);
+                }
             }
         });
 
