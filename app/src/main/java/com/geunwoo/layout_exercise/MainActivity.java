@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     User a = new User("doli", "1234", "Kim", "01090", "23", 1, "먹방, 사진");
     TripUser e = new TripUser(a, new Double[]{3.5,4.5}, new Double[]{4.5,5.7}, 1, 20, "");
     static int GET_SID = 1;
-    static String CURSID = "";
+    static String CURSID = " ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

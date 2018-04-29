@@ -11,7 +11,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -59,17 +58,13 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         SharedPreferences users
                 = getSharedPreferences("USERINFO", MODE_PRIVATE);
         String uploadInfo = pref.getString(BID, "");
-
-        Log.e("matching", uploadInfo);
-
         String uploaderID = uploadInfo.split("\n")[0];
-        String[] uploaderInfo = users.getString(uploaderID, "").split("\n");
+        String[] uploaderInfo = users.getString(uploaderID, "").split("::");
+        String[] forreutrner = uploadInfo.split("\n");
 
 
-        String returner = uploaderInfo[1];
-        String[] destinfo = returner.split("\n");
-        startposition = new LatLng(Integer.parseInt(destinfo[0]), Integer.parseInt(destinfo[1]));
-        destination = new LatLng(Integer.parseInt(destinfo[2]), Integer.parseInt(destinfo[3]));
+        startposition = new LatLng(Double.parseDouble(forreutrner[1]), Double.parseDouble(forreutrner[2]));
+        destination = new LatLng(Double.parseDouble(forreutrner[3]), Double.parseDouble(forreutrner[4]));
         String sex = "";
 
         if(Integer.parseInt(uploaderInfo[4]) == 0)
@@ -78,15 +73,6 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
             sex = "여자";
 
         Intent intent = getIntent();
-        final TripUser selectedUser = (TripUser) intent.getSerializableExtra("선택된 유저");
-
-        Double[] start = selectedUser.getStart_location();
-        start_lat = start[0];
-        start_long = start[1];
-
-        Double[] dest = selectedUser.getDestination();
-        dest_lat = dest[0];
-        dest_long = dest[1];
 
         Userlocation = findViewById(R.id.userlocation);
         UserInfo = findViewById(R.id.content);
@@ -94,13 +80,12 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         OK = findViewById(R.id.OK);
         NO = findViewById(R.id.NO);
 
-        content.setText(selectedUser.forMatching());
+        content.setText(String.format("이름: %s \n연락처: %s \n유저 성별: %s \n유저 여행스타일: %s \n  ",uploaderInfo[0],
+                uploaderInfo[2], sex, uploaderInfo[5]));
+
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.usermap);
         mapFragment.getMapAsync(this);
-
-        //동행 등록자 정보
-        //UserInfo.setText("나이 : " + userInfo[3] + '\n' + "성별 : " + sex + '\n' + "여행 스타일 : " + userInfo[5]);
 
         OK.setOnClickListener(new View.OnClickListener() {
             @Override
