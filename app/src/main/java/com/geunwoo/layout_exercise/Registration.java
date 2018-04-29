@@ -368,7 +368,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                                 = getSharedPreferences("REQUESTLIST", MODE_PRIVATE);
                         final int bid = sharedPreference.getAll().size() + 1;
                         SharedPreferences.Editor editor = sharedPreference.edit();
-                        editor.putString(Integer.toString(bid), CURSID + "\n" + returner + "0");
+                        editor.putString(Integer.toString(bid), CURSID + "\n" + returner + "\n" + "0");
                         editor.commit();
 
                         Toast.makeText(getApplicationContext(), "등록이 완료되었습니다.",

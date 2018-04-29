@@ -51,8 +51,7 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         //String[] Biddata = BID.split("\n");
 
 
-        //startposition = new LatLng(Integer.parseInt(Biddata[0]), Integer.parseInt(Biddata[1]));
-        //destination = new LatLng(Integer.parseInt(Biddata[2]), Integer.parseInt(Biddata[3]));
+
 
         SharedPreferences pref
                 = getSharedPreferences("REQUESTLIST", MODE_PRIVATE);
@@ -62,6 +61,11 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         String uploaderID = uploadInfo.split("\n")[0];
         String[] uploaderInfo = users.getString(uploaderID, "").split("\n");
 
+
+        String returner = uploaderInfo[1];
+        String[] destinfo = returner.split("\n");
+        startposition = new LatLng(Integer.parseInt(destinfo[0]), Integer.parseInt(destinfo[1]));
+        destination = new LatLng(Integer.parseInt(destinfo[2]), Integer.parseInt(destinfo[3]));
         String sex = "";
 
         if(Integer.parseInt(uploaderInfo[4]) == 0)
