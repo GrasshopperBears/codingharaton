@@ -84,7 +84,7 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         //동행 등록자 정보
-        UserInfo.setText("나이 : " + userInfo[3] + '\n' + "성별 : " + sex + '\n' + "여행 스타일 : " + userInfo[5]);
+        //UserInfo.setText("나이 : " + userInfo[3] + '\n' + "성별 : " + sex + '\n' + "여행 스타일 : " + userInfo[5]);
 
         OK.setOnClickListener(new View.OnClickListener() {
             @Override
