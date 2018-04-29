@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(MainActivity.this, board.class);
-                intent.putExtra("유저 목록", applicant_list);
+                intent.putExtra("CURSID", CURSID);
                 startActivity(intent);
 
 

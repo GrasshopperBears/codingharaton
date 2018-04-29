@@ -16,6 +16,8 @@ import java.util.Map;
 
 public class board extends AppCompatActivity {
 
+    private String CURUSERID = getIntent().getStringExtra("BID");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,7 @@ public class board extends AppCompatActivity {
 
                 Intent intent = new Intent(board.this, matching.class);
                 intent.putExtra("BID", position);
+                intent.putExtra("CURSID", CURUSERID);
                 startActivity(intent);
                 finish();
             }

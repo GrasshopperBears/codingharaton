@@ -18,8 +18,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:textSize="30dp"
-        android:text="함께 걸을까"
-        android:textColor="@color/White"
+        android:text="함께걸을까"
+        android:textColor="@color/Black"
         android:textStyle="bold"/>
     <Button
         android:id="@+id/Login"
