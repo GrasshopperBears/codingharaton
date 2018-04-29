@@ -55,12 +55,16 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         //destination = new LatLng(Integer.parseInt(Biddata[2]), Integer.parseInt(Biddata[3]));
 
         SharedPreferences pref
+                = getSharedPreferences("REQUESTLIST", MODE_PRIVATE);
+        SharedPreferences users
                 = getSharedPreferences("USERINFO", MODE_PRIVATE);
-        String value = pref.getString(BID, "");
-        String[] userInfo = value.split("::");
+        String uploadInfo = pref.getString(BID, "");
+        String uploaderID = uploadInfo.split("\n")[0];
+        String[] uploaderInfo = users.getString(uploaderID, "").split("\n");
+
         String sex = "";
 
-        if(Integer.parseInt(userInfo[4]) == 0)
+        if(Integer.parseInt(uploaderInfo[4]) == 0)
             sex = "남자";
         else
             sex = "여자";
@@ -88,7 +92,7 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         //동행 등록자 정보
-        UserInfo.setText("나이 : " + userInfo[3] + '\n' + "성별 : " + sex + '\n' + "여행 스타일 : " + userInfo[5]);
+        //UserInfo.setText("나이 : " + userInfo[3] + '\n' + "성별 : " + sex + '\n' + "여행 스타일 : " + userInfo[5]);
 
         OK.setOnClickListener(new View.OnClickListener() {
             @Override

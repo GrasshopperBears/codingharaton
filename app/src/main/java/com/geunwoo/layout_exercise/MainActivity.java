@@ -46,12 +46,12 @@ public class MainActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (CURSID.length() > 0){
+                if(CURSID.length() == 0)
+                    Toast.makeText(getApplicationContext(), "로그인 후 이용해주세요", Toast.LENGTH_LONG).show();
+                else{
                     Intent intent = new Intent(MainActivity.this, Registration.class);
                     intent.putExtra("CURSID", CURSID);
-                    startActivity(intent);}
-                else{
-                    Toast.makeText(getApplicationContext(), "로그인 후 사용해주세요.", Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
                 }
             }
         });
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(MainActivity.this, board.class);
-                intent.putExtra("유저 목록", applicant_list);
+                intent.putExtra("CURSID", CURSID);
                 startActivity(intent);
 
 
