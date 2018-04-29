@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -58,10 +59,10 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         SharedPreferences users
                 = getSharedPreferences("USERINFO", MODE_PRIVATE);
         String uploadInfo = pref.getString(BID, "");
+
         String uploaderID = uploadInfo.split("\n")[0];
         String[] uploaderInfo = users.getString(uploaderID, "").split("::");
         String[] forreutrner = uploadInfo.split("\n");
-
 
         startposition = new LatLng(Double.parseDouble(forreutrner[1]), Double.parseDouble(forreutrner[2]));
         destination = new LatLng(Double.parseDouble(forreutrner[3]), Double.parseDouble(forreutrner[4]));
@@ -80,8 +81,10 @@ public class matching extends AppCompatActivity implements OnMapReadyCallback {
         OK = findViewById(R.id.OK);
         NO = findViewById(R.id.NO);
 
-        content.setText(String.format("이름: %s \n연락처: %s \n유저 성별: %s \n유저 여행스타일: %s \n  ",uploaderInfo[0],
-                uploaderInfo[2], sex, uploaderInfo[5]));
+        content.setText(String.format("이름: %s \n연락처: %s \n유저 성별: %s \n유저 여행스타일: %s \n희망사항: %s",uploaderInfo[0],
+                uploaderInfo[2], sex, uploaderInfo[5], forreutrner[7]));
+
+        Log.e("matching", forreutrner[7]);
 
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.usermap);

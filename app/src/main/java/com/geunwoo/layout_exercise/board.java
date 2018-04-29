@@ -46,7 +46,7 @@ public class board extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(board.this, matching.class);
-                intent.putExtra("BID", Integer.toString(position));
+                intent.putExtra("BID", Integer.toString(position+1));
                 intent.putExtra("CURSID", CURUSERID);
                 startActivity(intent);
                 finish();
