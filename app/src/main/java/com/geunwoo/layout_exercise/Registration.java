@@ -74,6 +74,7 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
     EditText hope;
     Intent getSID;
     private String CURSID;
+    int checkersize = 1;
 
     private Double mLatitude = 0.0;
     private Double mLongitude = 0.0;
@@ -85,6 +86,9 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
     Double locationLatitude;
     Double locationLongitude;
+
+    LatLng startlocation;
+    LatLng destination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,34 +106,36 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
         hope = findViewById(R.id.hope);
         guide = findViewById(R.id.checkBox2);
         final CheckBox checker = findViewById(R.id.checker);
+        Button startloc = findViewById(R.id.startloc);
+        final Button destloc = findViewById(R.id.destloc);
 
 
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//
+//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//            //GPS 설정화면으로 이동
+//            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//            intent.addCategory(Intent.CATEGORY_DEFAULT);
+//            startActivity(intent);
+//            finish();
+//        }
 
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            //GPS 설정화면으로 이동
-            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            intent.addCategory(Intent.CATEGORY_DEFAULT);
-            startActivity(intent);
-            finish();
-        }
-
-        //마시멜로 이상이면 권한 요청하기
-        if (Build.VERSION.SDK_INT >= 23) {
-            //권한이 없는 경우
-            if (ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(Registration.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
-            //권한이 있는 경우
-            else {
-                requestMyLocation();
-            }
-        }
-        //마시멜로 아래
-        else {
-            requestMyLocation();
-        }
+//        //마시멜로 이상이면 권한 요청하기
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            //권한이 없는 경우
+//            if (ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+//                    ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(Registration.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+//            }
+//            //권한이 있는 경우
+//            else {
+//                requestMyLocation();
+//            }
+//        }
+//        //마시멜로 아래
+//        else {
+//            requestMyLocation();
+//        }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -162,14 +168,17 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                 String hopeful = hope.getText().toString();
                 String answer = "";
 
-                if (locationLatitude == null || locationLongitude == null) {
-                    Toast.makeText(getApplicationContext(), "도착지점을 표시해주세요.",
-                            Toast.LENGTH_SHORT).show();
-                }
-                else if (mLatitude == 0.0 || mLongitude == 0.0){
+
+                if (mLatitude == 0.0 || mLongitude == 0.0){
                     Toast.makeText(getApplicationContext(), "시작 지점를 표시해주세요.",
                             Toast.LENGTH_SHORT).show();
                 }
+
+                else if (locationLatitude == null || locationLongitude == null) {
+                    Toast.makeText(getApplicationContext(), "도착지점을 표시해주세요.",
+                            Toast.LENGTH_SHORT).show();
+                }
+
                 else {
                     answer += String.format("출발지점: (%.2f,%.2f) \n", mLatitude, mLongitude);
                     answer += String.format("도착지점: (%.2f,%.2f) \n", locationLatitude, locationLongitude);
@@ -177,10 +186,13 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                     answer += String.format("성별: %s \n", (gender== 2 ? "둘 다" : (gender == 0 ? "남자" : "여자")));
                     if (hopeful.length() > 0)
                         answer += String.format("기타 사항: %s", hopeful);
+
+
                     if (!man.isChecked() && !women.isChecked())
                         {
                         Toast.makeText(getApplicationContext(), "성별을 하나 이상 선택해주세요.",
                                 Toast.LENGTH_SHORT).show();
+                        trigger = 0;
                     }
 
                     else if (trigger == 0)
@@ -198,9 +210,12 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                     }
                     else if (guide.isChecked()) {
                         show(answer);
-                    } else
+                        trigger = 0 ;
+                    }
+                    else{
                         Toast.makeText(getApplicationContext(), "약관에 동의해주세요.",
                                 Toast.LENGTH_SHORT).show();
+                        trigger = 0;}
                 }
 
 
@@ -237,62 +252,96 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-        try {
-            Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
-                            .build(this);
-            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-        } catch (GooglePlayServicesRepairableException e) {
-            // TODO: Handle the error.
-        } catch (GooglePlayServicesNotAvailableException e) {
-            // TODO: Handle the error.
-        }
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) // PlacePicker 끝날 때 정보 받아오기
-    {
-        if(requestCode == PLACE_PICKER_REQUEST && resultCode == Activity.RESULT_OK)
-        {
-            final Place place = PlacePicker.getPlace(this, data); // 정보 받아오기
-            final CharSequence name = place.getName();
-            final CharSequence address = place.getAddress();
-
-
-            String attributions = (String) place.getAttributions();
-            if (attributions == null) {
-                attributions = "";
+        startloc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (startlocation == null)
+                    Toast.makeText(getApplicationContext(),
+                            "시작점이 설정되어 있지 않습니다."
+                            , Toast.LENGTH_SHORT).show();
+                else
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startlocation, 15));
             }
+        });
 
-            pickMark(place.getLatLng(),name.toString(),address.toString()); // 받아온 정보에서 위치, 이름 , 주소 받아와서 마크 찍기
+        destloc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (destination == null)
+                    Toast.makeText(getApplicationContext(),
+                            "도착점이 설정되어 있지 않습니다."
+                            , Toast.LENGTH_SHORT).show();
+                else
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destination, 15));
+            }
+        });
 
-
-            Log.d("Place_Pick","2");
-            Log.d("Place_Pick",attributions);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
-            googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
-        }
-        else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    } // 구글 플레이스 정보 가져오기
+    }
+//
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) // PlacePicker 끝날 때 정보 받아오기
+//    {
+//        if(requestCode == PLACE_PICKER_REQUEST && resultCode == Activity.RESULT_OK)
+//        {
+//            final Place place = PlacePicker.getPlace(this, data); // 정보 받아오기
+//            final CharSequence name = place.getName();
+//            final CharSequence address = place.getAddress();
+//
+//
+//            String attributions = (String) place.getAttributions();
+//            if (attributions == null) {
+//                attributions = "";
+//            }
+//
+//            //pickMark(place.getLatLng(),name.toString(),address.toString()); // 받아온 정보에서 위치, 이름 , 주소 받아와서 마크 찍기
+//
+//
+//            Log.d("Place_Pick","2");
+//            Log.d("Place_Pick",attributions);
+//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+//            googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+//        }
+//        else {
+//            super.onActivityResult(requestCode, resultCode, data);
+//        }
+//    } // 구글 플레이스 정보 가져오기
 
 
     private void pickMark(final LatLng LL,String name, String address) // 위도 경도, 이름 주소 받아서 마커 찍는 함수
     {
+        if(checkersize == 2){
+            Toast.makeText(getApplicationContext(), "도착점과 시작점이 이미 설정되어 있습니다. 선택을 확인해주세요",
+                    Toast.LENGTH_SHORT).show();
+            return;}
+
         MarkerOptions markerOptions = new MarkerOptions(); // 옵션 설정 해놓을 변수
         markerOptions.position(LL); // 위치 적용
 //        markerOptions.title(String.format(Locale.KOREA,"%.3f",LL.latitude)+","+String.format(Locale.KOREA,"%.3f",LL.longitude));
-        markerOptions.title(name); // 이름
 //        markerOptions.snippet(address.substring(0,20)); // 주소 넣음
+
         markerOptions.snippet(address); // 주소 넣음
         markerOptions.draggable(true); // 드래그 가능하도록
-        locationLatitude = markerOptions.getPosition().latitude;
-        locationLongitude = markerOptions.getPosition().longitude;
 
-        //색 다르게
-        googleMap.addMarker(markerOptions).setDraggable(true);
-        googleMap.addMarker(markerOptions).showInfoWindow(); // 맵에 추가
+
+        if (mLongitude == 0.0 && mLatitude == 0.0){
+            markerOptions.title(String.format("출발지점: %s", name)); // 이름
+            mLatitude = markerOptions.getPosition().latitude;
+            mLongitude = markerOptions.getPosition().longitude;
+            googleMap.addMarker(markerOptions).showInfoWindow(); // 맵에 추가
+            startlocation = markerOptions.getPosition();
+            checkersize += 1;
+        }
+
+        if (locationLongitude == null && locationLongitude == null){
+            markerOptions.title(String.format("도착지점: %s", name)); // 이름
+            locationLatitude = markerOptions.getPosition().latitude;
+            locationLongitude = markerOptions.getPosition().longitude;
+            googleMap.addMarker(markerOptions).showInfoWindow(); // 맵에 추가
+            destination = markerOptions.getPosition();
+            checkersize += 1;
+        }
+
+
+
 
     } // pickMark
 
@@ -318,19 +367,6 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
                         Toast.makeText(getApplicationContext(), "등록이 완료되었습니다.",
                                 Toast.LENGTH_SHORT).show();
-                        //
-                        //
-                        // 여기에 SID 구현해주어야 함.
-                        //
-                        // String userinfo = user.getString(SID, "");
-//                        userinfo += "::" + age + "::" + gender + "::" + mLatitude.toString() + "::" + mLongitude.toString()
-//                                + "::" + locationLatitude.toString() + "::" + locationLongitude.toString() + hope.getText().toString();
-//
-//                        SharedPreferences.Editor editor = board.edit();
-//
-//                        editor.putString(SID, userinfo); //First라는 key값으로 infoFirst 데이터를 저장한다.
-//                        editor.commit(); //완료한다.
-//
 
                         Intent intent = new Intent(Registration.this, MainActivity.class);
                         startActivity(intent);
@@ -348,65 +384,65 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     //권한 요청후 응답 콜백
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        //ACCESS_COARSE_LOCATION 권한
-        if (requestCode == 1) {
-            //권한받음
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                requestMyLocation();
-            }
-            //권한못받음
-            else {
-                Toast.makeText(this, "권한없음", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
-
-    public void requestMyLocation() {
-        if (ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        //요청
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 10, locationListener);
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        //ACCESS_COARSE_LOCATION 권한
+//        if (requestCode == 1) {
+//            //권한받음
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                requestMyLocation();
+//            }
+//            //권한못받음
+//            else {
+//                Toast.makeText(this, "권한없음", Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//        }
+//    }
+//
+//    public void requestMyLocation() {
+//        if (ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+//                ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
+//        //요청
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 10, locationListener);
+//    }
 
     //위치정보 구하기 리스너
-    LocationListener locationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            if (ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            //나의 위치를 한번만 가져오기 위해
-            locationManager.removeUpdates(locationListener);
-
-            //위도 경도
-            mLatitude = location.getLatitude();   //위도
-            mLongitude = location.getLongitude(); //경도
-
-            //맵생성
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-            //콜백클래스 설정
-            mapFragment.getMapAsync(Registration.this);
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            Log.d("gps", "onStatusChanged");
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-        }
-    };
+//    LocationListener locationListener = new LocationListener() {
+//        @Override
+//        public void onLocationChanged(Location location) {
+//            if (ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+//                    ContextCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                return;
+//            }
+//            //나의 위치를 한번만 가져오기 위해
+//            locationManager.removeUpdates(locationListener);
+//
+//            //위도 경도
+//            mLatitude = location.getLatitude();   //위도
+//            mLongitude = location.getLongitude(); //경도
+//
+//            //맵생성
+//            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+//            //콜백클래스 설정
+//            mapFragment.getMapAsync(Registration.this);
+//        }
+//
+//        @Override
+//        public void onStatusChanged(String provider, int status, Bundle extras) {
+//            Log.d("gps", "onStatusChanged");
+//        }
+//
+//        @Override
+//        public void onProviderEnabled(String provider) {
+//        }
+//
+//        @Override
+//        public void onProviderDisabled(String provider) {
+//        }
+//    };
 
     //구글맵 생성 콜백
     @Override
@@ -418,22 +454,23 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
 
         googleMap.getUiSettings().setCompassEnabled(true);
 
-        //나의 위치 설정
-        final LatLng position = new LatLng(mLatitude , mLongitude);
+        LatLng KAIST = new LatLng(36.369647, 127.364068);
 
-        MarkerOptions current = new MarkerOptions();
-        current.position(position);
-        googleMap.addMarker(current).showInfoWindow();
+        mLatitude = KAIST.latitude;
+        mLongitude = KAIST.longitude;
 
-        //화면중앙의 위치와 카메라 줌비율
-        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+        MarkerOptions marker = new MarkerOptions();
+        marker.position(KAIST);
+        startlocation = KAIST;
+        marker.title(String.format("초기 시작지점은 KAIST입니다."));
+        googleMap.addMarker(marker).showInfoWindow();
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(KAIST, 15));
 
-        //지도 보여주기
-        boxMap.setVisibility(View.VISIBLE);
 
-        final GoogleMap mMap = googleMap;
+//        //지도 보여주기
+//        boxMap.setVisibility(View.VISIBLE);
 
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng point) {
                 MarkerOptions mOptions = new MarkerOptions();
@@ -441,35 +478,26 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                 if(mLatitude== 0.0 || mLongitude == 0.0){
                     mLatitude = point.latitude;
                     mLongitude = point.longitude;
-
+                    mOptions.title("시작 지점");
                     mOptions.snippet(mLatitude.toString() + "," + mLongitude.toString());
 
                     mOptions.position(new LatLng(mLatitude, mLongitude));
-                    googleMap.addMarker(mOptions);
+                    googleMap.addMarker(mOptions).showInfoWindow();
+                    startlocation = mOptions.getPosition();
                 }
                 else if (locationLongitude == null || locationLatitude == null){
-                locationLatitude = point.latitude;
-                locationLongitude = point.longitude;
-
-                mOptions.snippet(locationLatitude.toString() + "," + locationLongitude.toString());
-
-                mOptions.position(new LatLng(locationLatitude, locationLongitude));
-                googleMap.addMarker(mOptions);}
+                    locationLatitude = point.latitude;
+                    locationLongitude = point.longitude;
+                    mOptions.title("도착 지점");
+                    mOptions.snippet(locationLatitude.toString() + "," + locationLongitude.toString());
+                    mOptions.position(new LatLng(locationLatitude, locationLongitude));
+                    googleMap.addMarker(mOptions).showInfoWindow();
+                    destination = mOptions.getPosition();
+                }
 
                 return;
             }
         });
-
-        LatLng KAIST = new LatLng(36.369647, 127.364068);
-        mMap.addMarker(new MarkerOptions().position(KAIST).title("Marker in KAIST"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(KAIST));
-
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
-        googleMap.animateCamera(zoom);
-
-        MarkerOptions marker = new MarkerOptions();
-        marker.position(KAIST);
-        googleMap.addMarker(marker).showInfoWindow();
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -479,18 +507,22 @@ public class Registration extends AppCompatActivity implements OnMapReadyCallbac
                     marker.remove();
                     mLatitude = 0.0;
                     mLongitude = 0.0;
+                    checkersize -= 1;
+                    startlocation = null;
                     Toast.makeText(getApplicationContext(),
                             "시작점 설정이 취소되었습니다."
-                            , Toast.LENGTH_LONG).show();
+                            , Toast.LENGTH_SHORT).show();
                     return false;
                 }
                 else {
                     marker.remove();
                     locationLatitude = null;
                     locationLongitude = null;
+                    checkersize -= 1;
+                    destination = null;
                     Toast.makeText(getApplicationContext(),
                             "도착점 설정이 취소되었습니다."
-                            , Toast.LENGTH_LONG).show();
+                            , Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
